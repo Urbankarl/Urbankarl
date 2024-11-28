@@ -11,7 +11,7 @@
         // Регистрация плагина в меню настроек Lampa
         Lampa.Settings.add({
             title: plugin.name,
-            icon: 'icon__movie',  // Поменяйте на свой иконку
+            icon: 'icon__movie',  // Иконка плагина
             description: plugin.description,
             onClick: function () {
                 Lampa.Noty.show('Плагин UAFix активирован!');
