@@ -1,13 +1,14 @@
 (function () {
     const plugin = {
-        id: 'uaflix',
-        name: 'UAFix',
+        id: 'zabba',
+        name: 'Zabba',
         version: '1.0.0',
         description: 'Плагин для просмотра фильмов и сериалов с сайта uafix.net',
     };
 
     // Проверка на повторную регистрацию плагина
     if (window.plugin_registered && window.plugin_registered.includes(plugin.id)) {
+        console.log('[Lampa] Плагин уже зарегистрирован');
         return;
     }
 
@@ -16,6 +17,7 @@
     }
 
     window.plugin_registered.push(plugin.id);  // Регистрируем плагин
+    console.log(`[Lampa] Регистрация плагина: ${plugin.name}`);
 
     // Регистрация плагина в системе Lampa
     Lampa.Plugin.add({
@@ -29,20 +31,24 @@
                 icon: 'icon__movie',  // Иконка плагина
                 description: plugin.description,
                 onClick: function () {
-                    Lampa.Noty.show('Плагин UAFix активирован!');
-                    loadMoviesAndSeries();  // Здесь будет вызов основной функции плагина в будущем
+                    Lampa.Noty.show('Плагин Zabba активирован!');
+                    loadMoviesAndSeries();  // В дальнейшем сюда будет добавлена логика
                 }
             };
         },
         init: function () {
             console.log(`[Lampa] Плагин "${plugin.name}" версии ${plugin.version} успешно загружен`);
+        },
+        error: function () {
+            console.error(`[Lampa] Ошибка при загрузке плагина "${plugin.name}"`);
         }
     });
 
-    // Функция загрузки данных о фильмах и сериалах
+    // Функция загрузки данных о фильмах и сериалах с uafix.net
     function loadMoviesAndSeries() {
-        Lampa.Noty.show('Загрузка фильмов и сериалов...');
-        // Здесь будет код для загрузки данных (пока не реализован)
-        // Например, API запросы для получения информации с uafix.net
+        Lampa.Noty.show('Загрузка фильмов и сериалов с uafix.net...');
+        // Пример вызова функции, которая будет в дальнейшем реализована
+        // Например, API-запросы к uafix.net для получения данных
+        console.log('[Lampa] Функция загрузки фильмов и сериалов с uafix.net');
     }
 })();
