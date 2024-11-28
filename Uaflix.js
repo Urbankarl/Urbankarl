@@ -1,5 +1,4 @@
 (function () {
-    // Основные параметры плагина
     const plugin = {
         id: 'uafix-plugin',
         name: 'UAFix',
@@ -43,8 +42,14 @@
 
     // Функция для получения данных о фильмах и сериалах
     function getMoviesAndSeries() {
+        console.log('Загружаем фильмы и сериалы...');
         return fetch(`${plugin.apiBaseUrl}/api/films`)  // Пример API для получения фильмов
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Ошибка при загрузке: ${response.statusText}`);
+                }
+                return response.json();
+            })
             .catch(error => {
                 console.error('Ошибка при загрузке данных о фильмах и сериалах:', error);
                 Lampa.Noty.show('Не удалось загрузить данные о фильмах и сериалах');
@@ -53,6 +58,11 @@
 
     // Функция для отображения фильмов и сериалов
     function showMoviesAndSeries(movies) {
+        if (!movies || movies.length === 0) {
+            Lampa.Noty.show('Нет доступных фильмов или сериалов');
+            return;
+        }
+
         const moviesList = document.createElement('div');
         moviesList.className = 'movies-list';
 
@@ -73,8 +83,14 @@
 
     // Функция для получения сезонов сериала
     function getSeasons(movieId) {
+        console.log(`Загружаем сезоны для фильма с ID ${movieId}...`);
         return fetch(`${plugin.apiBaseUrl}/api/series/${movieId}`)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Ошибка при загрузке сезонов: ${response.statusText}`);
+                }
+                return response.json();
+            })
             .catch(error => {
                 console.error('Ошибка при загрузке сезонов:', error);
                 Lampa.Noty.show('Не удалось загрузить сезоны');
@@ -84,6 +100,11 @@
     // Функция для отображения сезонов сериала
     function showSeasons(movieId) {
         getSeasons(movieId).then(seasons => {
+            if (!seasons || seasons.length === 0) {
+                Lampa.Noty.show('Нет сезонов для этого фильма');
+                return;
+            }
+
             const seasonsList = document.createElement('div');
             seasonsList.className = 'seasons-list';
 
@@ -105,8 +126,14 @@
 
     // Функция для получения серий сезона
     function getEpisodes(seasonId) {
+        console.log(`Загружаем серии для сезона с ID ${seasonId}...`);
         return fetch(`${plugin.apiBaseUrl}/api/episodes/${seasonId}`)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Ошибка при загрузке серий: ${response.statusText}`);
+                }
+                return response.json();
+            })
             .catch(error => {
                 console.error('Ошибка при загрузке серий:', error);
                 Lampa.Noty.show('Не удалось загрузить серии');
@@ -116,6 +143,11 @@
     // Функция для отображения серий
     function showEpisodes(seasonId) {
         getEpisodes(seasonId).then(episodes => {
+            if (!episodes || episodes.length === 0) {
+                Lampa.Noty.show('Нет серий для этого сезона');
+                return;
+            }
+
             const episodesList = document.createElement('div');
             episodesList.className = 'episodes-list';
 
@@ -137,6 +169,7 @@
 
     // Функция для воспроизведения видео
     function playVideo(videoUrl) {
+        console.log(`Воспроизведение видео с URL: ${videoUrl}`);
         const videoPlayer = document.createElement('video');
         videoPlayer.src = videoUrl;
         videoPlayer.controls = true;
